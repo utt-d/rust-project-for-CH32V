@@ -1,0 +1,19 @@
+# ビルド時のターゲットを指定する
+[build]
+target = "riscv32ec-unknown-none-elf.json"
+
+# ターゲット毎に指定するオプションを記載する
+[target.'cfg(all(target_arch = "riscv32", target_os = "none"))']
+rustflags = [
+  # memory.xをリンクするように指定する
+  "-C", "link-arg=-Tmemory.x",
+  # link.xをリンクするように指定する
+  "-C", "link-arg=-Tlink.x",
+]
+
+# nightlyの場合に適用するもの
+[unstable]
+# core crateを使用する
+build-std = ["core", "compiler_builtins"]
+# memcpy, memcmp, memsetなどメモリ操作の関数を使用する場合に必要なオプションを指定する
+build-std-features = ["compiler-builtins-mem"]
